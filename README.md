@@ -1,5 +1,7 @@
 # C++ Report Card
 
+[![Go Report Card](.github/goreportcard.svg)](.github/goreportcard-report.md)
+
 [![C++ Report Card example](.github/cppreportcard-example/badge.svg)](.github/cppreportcard-example/report.md)
 [![CI](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml/badge.svg)](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/soulteary/cppreportcard-action)](https://github.com/soulteary/cppreportcard-action/releases)
@@ -244,3 +246,12 @@ CLI. CI requires at least **95% total statement coverage**. The gate uses exact
 statement counts from `coverage.out`, not a rounded percentage, and does not
 exclude production files. Analyzer protocol tests use deterministic local
 processes; real-analyzer integration tests remain part of CI.
+
+## Go implementation quality
+
+The Go Report Card badge grades this Action's own Go implementation. CI generates
+its [report](.github/goreportcard-report.md) with
+[soulteary/goreportcard-action](https://github.com/soulteary/goreportcard-action).
+Default-branch runs update the committed badge and report; pull requests expose
+results as CI artifacts. This is separate from the language report generated
+for projects using this Action.
