@@ -1,0 +1,39 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version-file: go.mod
+      - run: go test -race ./...
+      - run: go vet ./...
+      - run: test -z "$(gofmt -l cmd internal)"
+      - run: bash -n scripts/*.sh
+      - name: Install analyzers
+        run: scripts/install-tools.sh
+        env:
+          LLVM_VERSION: '18'
+      - run: scripts/integration.sh
+      - run: cmake -S testdata/cmake -B testdata/cmake/build
+      - name: Smoke test local action
+        uses: ./
+        with:
+          directory: testdata/cmake
+          mode: full
+          install_tools: 'false'
+          compile_commands: build/compile_commands.json
+      - name: Require complete smoke analysis
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json
+          r = json.load(open('testdata/cmake/.cppreportcard/report.json'))
+          assert r['analysis_complete'], r
+          PY

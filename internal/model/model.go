@@ -24,6 +24,7 @@ type Check struct {
 }
 
 type Result struct {
+	Profile        string   `json:"analysis_profile"`
 	SchemaVersion  int      `json:"schema_version"`
 	ScoringVersion int      `json:"scoring_version"`
 	Mode           string   `json:"mode"`

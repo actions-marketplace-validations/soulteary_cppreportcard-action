@@ -2,3 +2,5 @@
 /build/
 /coverage.out
 /cppreportcard-cli
+**/.cppreportcard/
+/testdata/cmake/build/

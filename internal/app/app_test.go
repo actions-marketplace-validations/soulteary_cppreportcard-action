@@ -40,3 +40,24 @@ func TestInvalidArgs(t *testing.T) {
 		}
 	}
 }
+
+func TestFullMissingDatabaseStillReports(t *testing.T) {
+	d := t.TempDir()
+	os.WriteFile(filepath.Join(d, "x.cpp"), []byte("int main() {}\n"), 0644)
+	os.WriteFile(filepath.Join(d, "config.json"), []byte(`{"tools":{"clang-format":"/no/format","clang-tidy":"/no/tidy","cppcheck":"/no/cppcheck"}}`), 0644)
+	var b bytes.Buffer
+	if code := Run([]string{"--directory", d, "--mode", "full", "--config", "config.json", "--json", "--fail-on", "none"}, &b, &b, "test"); code != 2 {
+		t.Fatalf("%d: %s", code, b.String())
+	}
+	data, e := os.ReadFile(filepath.Join(d, ".cppreportcard/report.json"))
+	if e != nil {
+		t.Fatal(e)
+	}
+	var r model.Result
+	if e = json.Unmarshal(data, &r); e != nil {
+		t.Fatal(e)
+	}
+	if r.Complete || r.Score != nil {
+		t.Fatal(r)
+	}
+}

@@ -1,12 +1,15 @@
 package app
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
+	"math"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/soulteary/cppreportcard-action/internal/checker"
 	"github.com/soulteary/cppreportcard-action/internal/config"
@@ -43,7 +46,7 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 	if fs.NArg() != 0 {
 		return fail(fmt.Errorf("unexpected positional arguments"))
 	}
-	if *threshold < 0 || *threshold > 100 {
+	if math.IsNaN(*threshold) || math.IsInf(*threshold, 0) || *threshold < 0 || *threshold > 100 {
 		return fail(fmt.Errorf("threshold must be 0..100"))
 	}
 	switch *policy {
@@ -86,11 +89,28 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		return fail(fmt.Errorf("no C/C++ files found"))
 	}
 	r := model.Result{SchemaVersion: 1, ScoringVersion: 1, Mode: c.Mode, Files: len(files), Checks: []model.Check{}}
+	configData, _ := json.Marshal(c)
+	r.Profile = fmt.Sprintf("%x", sha256.Sum256(configData))
 	var units []project.Command
 	if c.Mode == "full" {
 		units, e = project.LoadCommands(abs, c.CompileCommands, c.Exclude)
 		if e != nil {
 			r.Checks = append(r.Checks, model.Check{Tool: "compilation-database", Status: "error", Error: e.Error(), Diagnostics: []model.Diagnostic{}})
+		}
+	}
+	if c.Mode == "full" && len(units) > 0 {
+		covered := map[string]bool{}
+		for _, unit := range units {
+			rel, _ := project.Relative(abs, unit.File)
+			covered[rel] = true
+		}
+		for _, file := range files {
+			switch strings.ToLower(filepath.Ext(file)) {
+			case ".c", ".cc", ".cpp", ".cxx":
+				if !covered[file] {
+					r.Checks = append(r.Checks, model.Check{Tool: "compilation-coverage", Status: "error", Error: "source missing from compilation database: " + file, Diagnostics: []model.Diagnostic{}})
+				}
+			}
 		}
 	}
 	prior := map[string]bool{}
@@ -103,8 +123,8 @@ func Run(args []string, stdout, stderr io.Writer, version string) int {
 		if e = json.Unmarshal(data, &old); e != nil {
 			return fail(e)
 		}
-		if old.SchemaVersion != 1 || old.ScoringVersion != 1 || old.Mode != c.Mode || !old.Complete {
-			return fail(fmt.Errorf("baseline must be complete and match schema, scoring version and mode"))
+		if old.SchemaVersion != 1 || old.ScoringVersion != 1 || old.Mode != c.Mode || old.Profile != r.Profile || !old.Complete {
+			return fail(fmt.Errorf("baseline must be complete and match schema, scoring version, mode and analysis configuration"))
 		}
 		for _, check := range old.Checks {
 			for _, d := range check.Diagnostics {
