@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html"
 	"strings"
+	"unicode"
 
 	"github.com/soulteary/cppreportcard-action/internal/model"
 )
@@ -50,13 +51,13 @@ func badgeTextWidth(text string) int {
 // SVG renders the original Go Report Card flat style: text-sized segments,
 // rounded clipping, a subtle highlight and a shadow for readable small text.
 func SVG(r model.Result) string {
-	label := "c++ report"
+	label := "C++ Report"
 	if r.Mode != "full" {
-		label += " (" + r.Mode + ")"
+		label += " (" + badgeTitle(r.Mode) + ")"
 	}
 	message := r.Grade
 	if !r.Complete {
-		message = "incomplete"
+		message = "Incomplete"
 	}
 	color := gradeColor(message)
 	labelWidth, messageWidth := badgeTextWidth(label)+20, badgeTextWidth(message)+20
@@ -76,4 +77,13 @@ func SVG(r model.Result) string {
 	}
 	b.WriteString("</g></svg>\n")
 	return b.String()
+}
+
+// badgeTitle capitalizes a display label without changing the underlying mode.
+func badgeTitle(value string) string {
+	runes := []rune(value)
+	if len(runes) > 0 {
+		runes[0] = unicode.ToUpper(runes[0])
+	}
+	return string(runes)
 }
