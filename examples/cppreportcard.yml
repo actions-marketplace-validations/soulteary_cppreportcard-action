@@ -1,0 +1,31 @@
+name: C++ Report Card
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  report:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      # Install project-specific dependencies here before configuring.
+      - name: Configure and build
+        run: |
+          cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          cmake --build build
+      - name: Analyze C/C++
+        id: report
+        uses: soulteary/cppreportcard-action@v1
+        with:
+          mode: full
+          compile_commands: build/compile_commands.json
+      - name: Upload reports even when the quality gate fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cppreportcard
+          path: .cppreportcard/
+          include-hidden-files: true
+          if-no-files-found: warn

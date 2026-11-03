@@ -1,10 +1,15 @@
 # C++ Report Card
 
+[![CI](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml/badge.svg)](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/soulteary/cppreportcard-action)](https://github.com/soulteary/cppreportcard-action/releases)
+
 A local-first C/C++ quality report: **Go CLI + GitHub Action**, powered by
 clang-format, Cppcheck and clang-tidy. Generates JSON, Markdown and a self-contained
 SVG badge. No hosted analysis service or badge service is required.
 
 ## GitHub Action
+
+A copyable workflow is available in [examples/cppreportcard.yml](examples/cppreportcard.yml).
 
 Start with a Linux CMake project. Install your project dependencies, configure it
 and build any targets that generate headers **before** analysis:
@@ -18,7 +23,7 @@ jobs:
   quality:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - run: |
           cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
           cmake --build build
@@ -32,6 +37,7 @@ jobs:
         with:
           name: cppreportcard
           path: .cppreportcard/
+          include-hidden-files: true
 ```
 
 `v1` is the moving stable major tag; pin a full commit SHA for reproducible CI.
@@ -197,8 +203,9 @@ header cases, and local Action execution. The integration test proves baseline
 suppression does not hide analysis failures.
 
 Tag `vX.Y.Z` to test and build six CLI archives (Linux/macOS/Windows,
-amd64/arm64) and SHA-256 checksums. The release workflow publishes these assets.
-Update `v1` deliberately after validating a stable release. Analyzer binaries are
+amd64/arm64) and SHA-256 checksums. The release workflow runs the full CI suite, then attaches these assets to a
+**draft release**. Publish the draft through GitHub to opt into Marketplace
+listing. Update `v1` deliberately after publishing a stable release. Analyzer binaries are
 not bundled; provision them separately.
 
 ## Scope
@@ -208,3 +215,13 @@ coverage collection, SARIF upload or automatic fixes. Tests and coverage can be
 added as report importers without changing the core diagnostic model.
 
 Apache-2.0; see [LICENSE](LICENSE).
+
+## Publishing to GitHub Marketplace
+
+The root `action.yml` is the single Marketplace entry point. The listing uses its
+name, description, icon and color; this README documents the Action's inputs,
+outputs, permissions and Ubuntu requirements.
+
+See [the maintainer publishing guide](.github/MARKETPLACE.md) for the draft release
+flow, Marketplace categories, and stable major tag promotion. Creating a GitHub
+Release through `gh` alone does not opt an Action into Marketplace.

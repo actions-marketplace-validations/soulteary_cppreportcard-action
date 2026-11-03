@@ -1,5 +1,5 @@
 name: C++ Report Card
-description: Analyze C/C++ projects and generate self-contained quality reports and badges.
+description: Generate C/C++ quality reports and SVG badges with clang-format, clang-tidy, and Cppcheck.
 author: soulteary
 branding:
   icon: award
@@ -7,36 +7,47 @@ branding:
 inputs:
   directory:
     description: Project directory relative to the workspace.
+    required: false
     default: '.'
   mode:
     description: Analysis mode (basic or full).
+    required: false
     default: basic
   compile_commands:
     description: Compilation database relative to the project directory.
+    required: false
     default: build/compile_commands.json
   config:
     description: Optional JSON configuration relative to the project directory.
+    required: false
     default: ''
   output_dir:
     description: Output directory relative to the project directory.
+    required: false
     default: .cppreportcard
   baseline:
     description: Optional previous report.json relative to the project directory.
+    required: false
     default: ''
   fail_on:
     description: Policy (none, errors, new-errors, findings).
+    required: false
     default: new-errors
   threshold:
     description: Minimum score; 0 disables score gate.
+    required: false
     default: '0'
   install_tools:
     description: Install analyzers on Ubuntu (true or false).
+    required: false
     default: 'true'
   llvm_version:
     description: LLVM major version from the Ubuntu package repository.
+    required: false
     default: '18'
   commit:
     description: Commit generated reports on branch push events only.
+    required: false
     default: 'false'
 outputs:
   status:

@@ -6,24 +6,19 @@ permissions:
   contents: read
 jobs:
   validate:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
-        with:
-          go-version-file: go.mod
-      - run: go test ./...
+    uses: ./.github/workflows/ci.yml
   release:
     needs: validate
     runs-on: ubuntu-24.04
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
         with:
           go-version-file: go.mod
       - run: scripts/build-release.sh "$GITHUB_REF_NAME"
-      - run: gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --generate-notes
+      - name: Prepare Marketplace release draft
+        run: scripts/prepare-release.sh "$GITHUB_REF_NAME"
         env:
           GH_TOKEN: ${{ github.token }}
