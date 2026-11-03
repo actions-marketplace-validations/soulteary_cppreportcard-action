@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.4
+
+- Raise total Go statement coverage to 97.72% with deterministic unit tests for success, failure and boundary cases.
+- Enforce a 95% coverage floor across all production Go packages in CI, retaining real-analyzer integration checks.
+
 ## 1.0.3
 
 - Capitalize report badge labels and refresh the README badge example.

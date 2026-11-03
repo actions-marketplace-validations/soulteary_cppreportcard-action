@@ -4,3 +4,6 @@
 /cppreportcard-cli
 **/.cppreportcard/
 /testdata/cmake/build/
+
+# Unit-test coverage profile
+/coverage.out

@@ -235,3 +235,12 @@ outputs, permissions and Ubuntu requirements.
 See [the maintainer publishing guide](.github/MARKETPLACE.md) for the draft release
 flow, Marketplace categories, and stable major tag promotion. Creating a GitHub
 Release through `gh` alone does not opt an Action into Marketplace.
+
+## Unit-test coverage
+
+Run `scripts/test-coverage.sh` to execute the Go unit tests with the race detector
+and coverage instrumentation across all production Go packages, including the
+CLI. CI requires at least **95% total statement coverage**. The gate uses exact
+statement counts from `coverage.out`, not a rounded percentage, and does not
+exclude production files. Analyzer protocol tests use deterministic local
+processes; real-analyzer integration tests remain part of CI.
