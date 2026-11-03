@@ -63,6 +63,9 @@ func Discover(root string, exclude []string) ([]string, error) {
 			}
 			return nil
 		}
+		if strings.HasPrefix(d.Name(), "._") {
+			return nil
+		}
 		if d.Type()&os.ModeSymlink != 0 {
 			return nil
 		}

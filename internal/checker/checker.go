@@ -106,6 +106,9 @@ func ParseTidy(root, out string, exclude []string) ([]model.Diagnostic, bool) {
 		}
 		n, _ := strconv.Atoi(m[2])
 		col, _ := strconv.Atoi(m[3])
+		if strings.HasPrefix(rule, "clang-analyzer-") {
+			sev = "error"
+		}
 		if rule == "" {
 			rule = "clang-diagnostic"
 		}
@@ -175,7 +178,8 @@ func (r Runner) tidyUnit(unit project.Command) ([]model.Diagnostic, bool, error)
 }
 
 type cppXML struct {
-	Errors []struct {
+	XMLName xml.Name `xml:"results"`
+	Errors  []struct {
 		ID        string `xml:"id,attr"`
 		Severity  string `xml:"severity,attr"`
 		Message   string `xml:"msg,attr"`

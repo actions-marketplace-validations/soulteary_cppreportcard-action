@@ -161,7 +161,8 @@ need a dedicated Clang-compatible build configuration.
 The JSON records schema version, scoring version, mode, configuration fingerprint,
 tool versions, diagnostics and analysis status. Scoring v1 uses the **lowest
 clean-file percentage across completed checks**; all discovered C/C++ files form
-the denominator. Any error-severity finding caps the score at 59. Grades: A+ ≥95,
+the denominator. Clang Static Analyzer rules (`clang-analyzer-*`) are normalized to error severity;
+other clang-tidy warnings remain warnings. Any error-severity finding caps the score at 59. Grades: A+ ≥95,
 A ≥90, B ≥80, C ≥70, D ≥60, F <60. Incomplete runs have no numeric score.
 
 This score is a project summary, not a safety certification or a reliable ranking

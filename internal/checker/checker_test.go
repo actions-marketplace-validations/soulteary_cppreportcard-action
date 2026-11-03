@@ -24,3 +24,14 @@ func TestParsers(t *testing.T) {
 		t.Fatal("accepted missing XML")
 	}
 }
+
+func TestAnalyzerSeverityAndMalformedXML(t *testing.T) {
+	root := t.TempDir()
+	ds, broken := ParseTidy(root, filepath.Join(root, "x.cpp")+":1:1: warning: null pointer [clang-analyzer-core.NullDereference]", nil)
+	if broken || len(ds) != 1 || ds[0].Severity != "error" {
+		t.Fatalf("%+v %v", ds, broken)
+	}
+	if _, _, e := ParseCppcheck(root, `<?xml version="1.0"?><wrong/>`, nil); e == nil {
+		t.Fatal("wrong root accepted")
+	}
+}

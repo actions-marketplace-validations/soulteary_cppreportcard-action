@@ -8,7 +8,7 @@ import (
 
 func TestDiscovery(t *testing.T) {
 	d := t.TempDir()
-	for _, p := range []string{"src/a.cpp", "third_party/b.cpp", "include/a.hpp", "build/c.cpp"} {
+	for _, p := range []string{"src/a.cpp", "third_party/b.cpp", "include/a.hpp", "build/c.cpp", "src/._a.cpp"} {
 		if e := os.MkdirAll(filepath.Dir(filepath.Join(d, p)), 0755); e != nil {
 			t.Fatal(e)
 		}
