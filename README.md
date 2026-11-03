@@ -1,10 +1,6 @@
 # C++ Report Card
 
-[![Go Report Card](.github/goreportcard.svg)](.github/goreportcard-report.md)
-
-[![C++ Report Card example](.github/cppreportcard-example/badge.svg)](.github/cppreportcard-example/report.md)
-[![CI](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml/badge.svg)](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/soulteary/cppreportcard-action)](https://github.com/soulteary/cppreportcard-action/releases)
+[![C++ Report Card example](.github/cppreportcard-example/badge.svg)](.github/cppreportcard-example/report.md) [![Go Report Card](.github/goreportcard.svg)](.github/goreportcard-report.md) [![CI](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml/badge.svg)](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml) [![Release](https://img.shields.io/github/v/release/soulteary/cppreportcard-action)](https://github.com/soulteary/cppreportcard-action/releases)
 
 A local-first C/C++ quality report: **Go CLI + GitHub Action**, powered by
 clang-format, Cppcheck and clang-tidy. Generates JSON, Markdown and a self-contained
