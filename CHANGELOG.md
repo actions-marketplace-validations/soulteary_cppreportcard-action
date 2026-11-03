@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.2
+
+- Match the original Go Report Card badge style with rounded corners, compact text-sized segments, and grade-specific colors.
+- Preserve visible basic-mode labels and grey incomplete-analysis badges.
+- Display a real CMake example badge and its analysis report in the README.
+- Add regression tests for badge colors, analysis state and SVG escaping.
+- Verify and upload the generated README example in CI.
+
 ## 1.0.1
 
 - Prepare Marketplace release drafts after full CI validation.
