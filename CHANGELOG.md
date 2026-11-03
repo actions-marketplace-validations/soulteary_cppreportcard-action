@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.3
+
+- Capitalize report badge labels and refresh the README badge example.
+- Capitalize displayed analysis modes and incomplete status without changing machine-readable report fields.
+
 ## 1.0.2
 
 - Match the original Go Report Card badge style with rounded corners, compact text-sized segments, and grade-specific colors.
