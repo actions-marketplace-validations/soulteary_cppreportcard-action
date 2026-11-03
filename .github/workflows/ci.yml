@@ -23,6 +23,14 @@ jobs:
         env:
           LLVM_VERSION: '18'
       - run: scripts/integration.sh
+      - name: Verify README badge example generation
+        run: scripts/update-badge-example.sh
+      - name: Upload README badge example
+        uses: actions/upload-artifact@v4
+        with:
+          name: cppreportcard-example
+          path: .github/cppreportcard-example/
+          include-hidden-files: true
       - run: cmake -S testdata/cmake -B testdata/cmake/build
       - name: Smoke test local action
         uses: ./

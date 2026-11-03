@@ -1,11 +1,16 @@
 # C++ Report Card
 
+[![C++ Report Card example](.github/cppreportcard-example/badge.svg)](.github/cppreportcard-example/report.md)
 [![CI](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml/badge.svg)](https://github.com/soulteary/cppreportcard-action/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/soulteary/cppreportcard-action)](https://github.com/soulteary/cppreportcard-action/releases)
 
 A local-first C/C++ quality report: **Go CLI + GitHub Action**, powered by
 clang-format, Cppcheck and clang-tidy. Generates JSON, Markdown and a self-contained
 SVG badge. No hosted analysis service or badge service is required.
+
+The C++ badge above is the actual full-analysis result for the bundled
+[CMake example](testdata/cmake), not a C++ rating of this Go implementation.
+Click it to see the report. Regenerate it with `scripts/update-badge-example.sh`.
 
 ## GitHub Action
 
@@ -54,6 +59,11 @@ It does not commit files by default. Link a committed badge with:
 ```
 
 To opt into report commits, set `commit: 'true'` and `permissions: contents: write`.
+Badges use the same compact, rounded style and grade colors as
+[Go Report Card](https://github.com/soulteary/goreportcard-action). Basic-mode
+badges visibly include `(basic)`; incomplete analysis is grey and shows
+`incomplete` instead of a grade.
+
 Commits only run for branch `push` events, never for pull requests. Use a dedicated
 workflow or path filters to avoid unnecessary report-only runs.
 

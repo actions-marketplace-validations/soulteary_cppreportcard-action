@@ -3,7 +3,6 @@ package report
 import (
 	"encoding/json"
 	"fmt"
-	"html"
 	"os"
 	"path/filepath"
 	"strings"
@@ -46,21 +45,6 @@ func Markdown(r model.Result) string {
 		}
 	}
 	return b.String()
-}
-func SVG(r model.Result) string {
-	label := "C++ " + r.Mode
-	value := r.Grade
-	color := "#777"
-	if r.Complete {
-		color = "#d99a00"
-		if r.Grade == "A+" || r.Grade == "A" {
-			color = "#22863a"
-		}
-		if r.Grade == "F" {
-			color = "#c62828"
-		}
-	}
-	return fmt.Sprintf(`<svg xmlns="http://www.w3.org/2000/svg" width="220" height="20" role="img" aria-label="%s: %s"><title>%s: %s</title><rect width="110" height="20" fill="#555"/><rect x="110" width="110" height="20" fill="%s"/><g fill="#fff" font-family="Verdana,sans-serif" font-size="11" text-anchor="middle"><text x="55" y="14">%s</text><text x="165" y="14">%s</text></g></svg>`, html.EscapeString(label), html.EscapeString(value), html.EscapeString(label), html.EscapeString(value), color, html.EscapeString(label), html.EscapeString(value)) + "\n"
 }
 func Write(dir string, r model.Result) error {
 	if e := os.MkdirAll(dir, 0755); e != nil {
