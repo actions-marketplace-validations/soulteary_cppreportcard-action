@@ -22,14 +22,14 @@
 
 ### gocyclo
 
-- `internal/app/app.go`
-  - Line 22: cyclomatic complexity 57 for function Run
-- `internal/report/score.go`
-  - Line 14: cyclomatic complexity 27 for function Finalize
 - `internal/report/render_test.go`
   - Line 13: cyclomatic complexity 18 for function TestReportFilesAndEscaping
 - `internal/project/project.go`
   - Line 84: cyclomatic complexity 17 for function LoadCommands
+- `internal/app/app.go`
+  - Line 22: cyclomatic complexity 57 for function Run
+- `internal/report/score.go`
+  - Line 14: cyclomatic complexity 27 for function Finalize
 
 ---
 
